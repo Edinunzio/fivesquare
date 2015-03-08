@@ -45,11 +45,10 @@ class StoreForm(forms.Form):
 class ReviewForm(forms.Form):
     CHOICES = (('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'))
     title = forms.CharField(widget=forms.widgets.TextInput())
-    text = forms.CharField(widget=forms.widgets.TextInput())
-    tags = forms.CharField(widget=forms.widgets.Textarea())
+    text = forms.CharField(widget=forms.widgets.Textarea())
+    tags = forms.CharField(widget=forms.widgets.TextInput())
     rating = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
     store_id = forms.CharField(widget=forms.widgets.TextInput())
-    # date_modified = forms.CharField(widget=forms.widgets.TextInput())
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)

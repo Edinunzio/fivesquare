@@ -14,47 +14,44 @@
             <a href="{{ store.0.get_delete_url }}" class="btn btn-small">Delete</a><br>
             <hr>
             {% if store.1.count > 0 %}
-
                 <h5>Tags:</h5>
-                <ul>{% for tag in store.4 %}
-                    <li>{{ tag }}</li>
-                {% endfor %}</ul>
-
+                <ul>
+                    {% for tag in store.4 %}
+                        <li>{{ tag }}</li>
+                    {% endfor %}
+                </ul>
                 <strong>Average Rating: </strong>{{ store.5 }}
-
-
-
-    </div>
                 </div>
+    </div>
                 <div class="row">
                 <div class="col-md-12">
-                <div>
+
+                <hr>
+                <h3>Reviews</h3>
+                {% for review in store.1 %}
+                    <div>
+                        <h5>{{ review.title }}</h5>
+                        <strong>Published:</strong> {{ review.date_modified }}<br>
+                        <strong>Message:</strong>
+
+                        <p>{{ review.text }}</p>
+                        <h5>Tags:</h5>
+                        <ul>
+                            {% for tag in review.tags %}
+                                <li>{{ tag }}</li>
+                            {% endfor %}
+                        </ul>
+                        <strong>Rating: </strong> {{ review.rating }}<br>
+
+                    </div><br>
+                    <a href="{{ review.get_delete_url }}" class="btn btn-small">Delete</a>
                     <hr>
-                    <h3>Reviews</h3>
-                    {% for review in store.1 %}
-                        <div>
-                            <h5>{{ review.title }}</h5>
-                            <strong>Published:</strong> {{ review.date_modified }}<br>
-                            <strong>Message:</strong>
+                {% endfor %}
 
-                            <p>{{ review.text }}</p>
-                            <h5>Tags:</h5>
-                            <ul>
-                                {% for tag in review.tags %}
-                                    <li>{{ tag }}</li>
-                                {% endfor %}
-                            </ul>
-                            <strong>Rating: </strong> {{ review.rating }}<br>
-
-                        </div><br>
-                        <a href="{{ review.get_delete_url }}" class="btn btn-small">Delete</a>
-                    {% endfor %}
-                </div>
             {% endif %}
             </div>
             </div>
     <div class="row">
-    <hr>
         <div class="add-review">
         <h4>Add a review</h4>
 
