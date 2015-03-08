@@ -2,8 +2,9 @@
 
 {% block content %}
 	<div style="margin-bottom: 20px;">
-		<h4>{{ post.title }}</h4>
-		{{ post.text|linebreaks }}
+        <h4>{{ store.name }}</h4>
+        {{ store.address1 }}
+        {{ store.city }},{{ store.state }} {{ store.zipcode }}
 		<a href="{{ post.get_edit_url }}" class="btn btn-small">Edit</a> 
 		<a href="{{ post.get_delete_url }}" class="btn btn-small">Delete</a>
 	</div>
