@@ -43,15 +43,11 @@ class StoreDetailView(DetailView):
         id = self.kwargs['pk']
         details = Store.objects(id=id)[0]
         reviews = Review.objects.all().filter(store_id=id).order_by('-date_modified')
-        tags = reviews.fields('tags')
+        tags = Review.objects.filter(store_id=id).distinct('tags')
         ratings = reviews.average('rating')
         form = self.review_form
 
         return details, reviews, id, form, tags, ratings
-
-    """def get_queryset(self):
-        posts = Review.objects(id=self.kwargs['pk'])[0]
-        return posts"""
 
 
 class StoreUpdateView(UpdateView):
@@ -86,7 +82,6 @@ class StoreCreateView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        # self.object.user = self.request.user
         messages.success(self.request, "The store has been posted.")
         return super(StoreCreateView, self).form_valid(form)
 
