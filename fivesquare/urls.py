@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'fivesquare.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^$', StoreListView.as_view(), name='list'),
-    url(r'^post/', include('api.urls')),
+    url(r'^store/', include('api.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
 
