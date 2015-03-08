@@ -5,8 +5,12 @@
         <h4>{{ store.name }}</h4>
         {{ store.address1 }}
         {{ store.city }},{{ store.state }} {{ store.zipcode }}
-		<a href="{{ post.get_edit_url }}" class="btn btn-small">Edit</a> 
-		<a href="{{ post.get_delete_url }}" class="btn btn-small">Delete</a>
+        <a href="{{ store.get_edit_url }}" class="btn btn-small">Edit</a>
+        <a href="{{ store.get_delete_url }}" class="btn btn-small">Delete</a>
+        {{ posts }}
 	</div>
+    <div>
+        <a href="{% url "review_create" %}">Add a review</a>
+    </div>
 {% endblock %}
 

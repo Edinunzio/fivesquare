@@ -8,8 +8,8 @@
             {{ post.address1 }}
             {{ post.city }},{{ post.state }} {{ post.zipcode }}
             <a href="{{ post.get_absolute_url }}" class="btn btn-small">Read</a>
-            {% comment %}<a href="{{ post.get_edit_url }}" class="btn btn-small">Edit</a>
-			<a href="{{ post.get_delete_url }}" class="btn btn-small">Delete</a>{% endcomment %}
+            <a href="{{ post.get_edit_url }}" class="btn btn-small">Edit</a>
+            <a href="{{ post.get_delete_url }}" class="btn btn-small">Delete</a>
 		</div>
 	{% endfor %}
 {% endblock %}
