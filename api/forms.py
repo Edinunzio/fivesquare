@@ -54,6 +54,7 @@ class ReviewForm(forms.Form):
     tags = forms.CharField(widget=forms.widgets.Textarea())
     rating = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
     store_id = forms.CharField(widget=forms.widgets.TextInput())
+    # date_modified = forms.CharField(widget=forms.widgets.TextInput())
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
@@ -64,15 +65,18 @@ class ReviewForm(forms.Form):
             self.fields['tags'].initial = self.instance.tags
             self.fields['rating'].initial = self.instance.rating
             self.fields['store_id'].initial = self.instance.store_id
+            self.fields['date_modified'].initial = self.instance.date_modified
 
 
     def save(self, commit=True):
+        date_modified = datetime.now
         post = self.instance if self.instance else Review()
         post.title = self.cleaned_data['title']
         post.text = self.cleaned_data['text']
         post.tags = self.cleaned_data['tags'].split(',')
         post.rating = self.cleaned_data['rating']
         post.store_id = self.cleaned_data['store_id']
+        post.date_modified = date_modified
 
         if commit:
             post.save()

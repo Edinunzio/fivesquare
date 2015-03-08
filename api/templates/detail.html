@@ -32,8 +32,10 @@
                     {% endfor %}
                 </ul>
                 <span>Review Rating:</span> {{ review.rating }}<br>
-                <span>Store ID:</span> {{ review.store_id }}
+                <span>Store ID:</span> {{ review.store_id }}<br>
+                <span>Date Published:</span> {{ review.date_modified }}
             </div><br>
+            <a href="{{ review.get_delete_url }}" class="btn btn-small">Delete</a>
         {% endfor %}
     </div>
     <hr>
@@ -46,6 +48,7 @@
             <label>{{ store.3.tags.label_tag }}</label>{{ store.3.tags }}
             <label>{{ store.3.rating.label_tag }}</label>{{ store.3.rating }}
             <input type="hidden" id="id_store_id" name="store_id" value="{{ store.2 }}"/>
+
             <input type="submit"/>
         </form>
     </div>

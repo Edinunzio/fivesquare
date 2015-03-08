@@ -42,10 +42,10 @@ class StoreDetailView(DetailView):
     def get_object(self):
         id = self.kwargs['pk']
         details = Store.objects(id=id)[0]
-        reviews = Review.objects(store_id=id)
+        reviews = Review.objects.all().filter(store_id=id).order_by('-date_modified')
         tags = reviews.fields('tags')
         # reviews = self.reviews.objects#(store_id=id)
-        self.review_form.store_id = id
+        # self.review_form.store_id = id
         form = self.review_form
 
         return details, reviews, id, form, tags
@@ -112,19 +112,6 @@ class StoreDeleteView(DeleteView):
         return Store.objects(id=self.kwargs['pk'])[0]
 
 
-# Reviews
-
-"""class ReviewListView(ListView):
-    model = Review
-    context_object_name = "review_list"
-
-    def get_template_names(self):
-        return ["list.html"]
-
-    def get_queryset(self):
-        posts = Review.objects
-        return posts"""
-
 
 class ReviewDetailView(DetailView):
     model = Review
@@ -168,6 +155,7 @@ class ReviewCreateView(CreateView):
         return reverse('list')
 
     def form_valid(self, form):
+        self.date_modified = datetime.now
         self.object = form.save(commit=False)
         messages.success(self.request, "The review has been posted.")
         return super(ReviewCreateView, self).form_valid(form)

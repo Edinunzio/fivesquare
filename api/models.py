@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from mongoengine import *
 from django.core.urlresolvers import reverse
 
@@ -13,6 +15,7 @@ class Review(Document):
     text = StringField(required=True)
     tags = ListField(StringField(max_length=30))
     rating = IntField(min_value=1, max_value=5)
+    date_modified = DateTimeField(default=datetime.now)
     store_id = StringField()
 
 
