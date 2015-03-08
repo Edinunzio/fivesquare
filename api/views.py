@@ -106,7 +106,6 @@ class StoreDeleteView(DeleteView):
         return Store.objects(id=self.kwargs['pk'])[0]
 
 
-
 class ReviewDetailView(DetailView):
     model = Review
     context_object_name = "review_detail"

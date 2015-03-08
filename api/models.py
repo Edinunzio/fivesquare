@@ -18,7 +18,6 @@ class Review(Document):
     date_modified = DateTimeField(default=datetime.now)
     store_id = StringField()
 
-
     def get_store_id(self, store_id):
         self.store_id = store_id
         return store_id
@@ -48,7 +47,6 @@ class Store(Document):
     name = StringField(max_length=200, required=True)
     description = StringField(required=True)
     address1 = StringField(required=True)
-    address2 = StringField()
     city = StringField(required=True)
     state = StringField(required=True)
     zipcode = IntField()
