@@ -13,7 +13,7 @@ class StoreListView(ListView):
 
     def __init__(self):
         """
-        setup model and template data var
+        Setup model and template data var
         :return:
         """
         self.model = Store
@@ -40,7 +40,7 @@ class StoreDetailView(DetailView):
 
     def __init__(self):
         """
-        setup models, template vars, and form
+        Setup models, template vars, and form
         :return:
         """
         self.model = Store
@@ -67,7 +67,14 @@ class StoreDetailView(DetailView):
 
 
 class StoreUpdateView(UpdateView):
+    """
+    Updating store info view
+    """
     def __init__(self):
+        """
+        Setup model, form, and template var
+        :return:
+        """
         self.model = Store
         self.form_class = StoreForm
         self.context_object_name = "post"
@@ -79,16 +86,32 @@ class StoreUpdateView(UpdateView):
         return reverse('list')
 
     def form_valid(self, form):
+        """
+        Validates and saves form data
+        :param form: store info data
+        :return:
+        """
         self.object = form.save()
         messages.success(self.request, "The store has been updated.")
         return super(StoreUpdateView, self).form_valid(form)
 
     def get_object(self):
-        return Store.objects(id=self.kwargs['pk'])[0]
+        """
+        Gets current store info
+        :return: store details
+        """
+        return self.model.objects(id=self.kwargs['pk'])[0]
 
 
 class StoreCreateView(CreateView):
+    """
+    View to create new store
+    """
     def __init__(self):
+        """
+        Setup model, form
+        :return:
+        """
         self.model = Store
         self.form_class = StoreForm
 
@@ -99,34 +122,65 @@ class StoreCreateView(CreateView):
         return reverse('list')
 
     def form_valid(self, form):
+        """
+        Validates and saves form data input by user
+        :param form:
+        :return:
+        """
         self.object = form.save(commit=False)
         messages.success(self.request, "The store has been posted.")
         return super(StoreCreateView, self).form_valid(form)
 
 
 class StoreDeleteView(DeleteView):
+    """
+    Removes store
+    """
     def __init__(self):
+        """
+        Setup model
+        :return:
+        """
         self.model = Store
 
     def get_success_url(self):
         return reverse('list')
 
     def get(self, *args, **kwargs):
-        """ Skip confirmation page """
+        """
+         Removes store while skipping confirmation page
+        :param args:
+        :param kwargs:
+        :return:
+        """
         return self.delete(self.request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        """
+        Removes store
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         self.object = self.get_object()
         self.object.delete()
         messages.success(self.request, "The store has been removed.")
         return redirect(self.get_success_url())
 
     def get_object(self):
-        return Store.objects(id=self.kwargs['pk'])[0]
+        return self.model.objects(id=self.kwargs['pk'])[0]
 
 
 class ReviewDetailView(DetailView):
+    """
+    Individual view of a review.
+    """
     def __init__(self):
+        """
+        Setup model, template var
+        :return:
+        """
         self.model = Review
         self.context_object_name = "review_detail"
 
@@ -138,7 +192,14 @@ class ReviewDetailView(DetailView):
 
 
 class ReviewUpdateView(UpdateView):
+    """
+    View to edit review
+    """
     def __init__(self):
+        """
+        Setup model, form, template var
+        :return:
+        """
         self.model = Review
         self.form_class = ReviewForm
         self.context_object_name = "review_update"
@@ -150,16 +211,28 @@ class ReviewUpdateView(UpdateView):
         return reverse('list')
 
     def form_valid(self, form):
+        """
+        Validates and saves form data
+        :param form:
+        :return:
+        """
         self.object = form.save()
         messages.success(self.request, "The review has been updated.")
         return super(ReviewUpdateView, self).form_valid(form)
 
     def get_object(self):
-        return Review.objects(id=self.kwargs['pk'])[0]
+        return self.model.objects(id=self.kwargs['pk'])[0]
 
 
 class ReviewCreateView(CreateView):
+    """
+    View to create reviews
+    """
     def __init__(self):
+        """
+        Setup model, form
+        :return:
+        """
         self.model = Review
         self.form_class = ReviewForm
 
@@ -170,6 +243,11 @@ class ReviewCreateView(CreateView):
         return reverse('list')
 
     def form_valid(self, form):
+        """
+        Validates and saves form data, and inserts timestamp into record
+        :param form:
+        :return:
+        """
         self.date_modified = datetime.now
         self.object = form.save(commit=False)
         messages.success(self.request, "The review has been posted.")
@@ -177,21 +255,40 @@ class ReviewCreateView(CreateView):
 
 
 class ReviewDeleteView(DeleteView):
+    """
+    Removes Reviews
+    """
     def __init__(self):
+        """
+        Setup model
+        :return:
+        """
         self.model = Review
 
     def get_success_url(self):
         return reverse('list')
 
     def get(self, *args, **kwargs):
-        """ Skip confirmation page """
+        """
+        Removes review while skipping confirmation page
+        :param args:
+        :param kwargs:
+        :return:
+        """
         return self.delete(self.request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        """
+        Removes review from store
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         self.object = self.get_object()
         self.object.delete()
         messages.success(self.request, "The review has been removed.")
         return redirect(self.get_success_url())
 
     def get_object(self):
-        return Review.objects(id=self.kwargs['pk'])[0]
+        return self.model.objects(id=self.kwargs['pk'])[0]
