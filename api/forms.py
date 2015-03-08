@@ -12,7 +12,7 @@ class ReviewForm(forms.Form):
         self.instance = kwargs.pop('instance', None)
         super(ReviewForm, self).__init__(*args, **kwargs)
         if self.instance:
-            #self.fields['title'].initial = self.instance.title
+            # self.fields['title'].initial = self.instance.title
             self.fields['text'].initial = self.instance.text
             #self.fields['is_published'].initial = self.instance.is_published
 

@@ -51,7 +51,7 @@ class Store(Document):
     zipcode = IntField()
     latitude = FloatField()
     longitude = FloatField()
-    #text_length = IntField()
+    # text_length = IntField()
     #date_modified = DateTimeField(default=datetime.now)
     tags = ListField(EmbeddedDocumentField(Tags))
     reviews = ListField(EmbeddedDocumentField(Review))
