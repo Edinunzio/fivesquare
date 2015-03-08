@@ -48,11 +48,11 @@ class StoreForm(forms.Form):
 
 
 class ReviewForm(forms.Form):
-    CHOICES = (1, 2, 3, 4, 5)
+    CHOICES = (('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'))
     title = forms.CharField(widget=forms.widgets.TextInput())
     text = forms.CharField(widget=forms.widgets.TextInput())
     tags = forms.CharField(widget=forms.widgets.Textarea())
-    rating = forms.Select(choices=CHOICES)
+    rating = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
@@ -65,10 +65,10 @@ class ReviewForm(forms.Form):
 
 
     def save(self, commit=True):
-        post = self.instance if self.instance else Store()
+        post = self.instance if self.instance else Review()
         post.title = self.cleaned_data['title']
         post.text = self.cleaned_data['text']
-        post.tags = self.cleaned_data['tags']
+        post.tags = self.cleaned_data['tags'].split(',')
         post.rating = self.cleaned_data['rating']
         if commit:
             post.save()
