@@ -14,6 +14,13 @@
                 {% endfor %}
             {% endfor %}
         </div>
+        <div>
+            <label>Average Rating:</label>
+            {{ store.5 }}
+            {% comment for rating in store.5 %}
+                {{ rating.rating }}
+            {% endfor %}{% endcomment %}
+        </div>
         <a href="{{ store.0.get_edit_url }}" class="btn btn-small">Edit</a>
         <a href="{{ store.0.get_delete_url }}" class="btn btn-small">Delete</a>
 	</div>

@@ -44,11 +44,10 @@ class StoreDetailView(DetailView):
         details = Store.objects(id=id)[0]
         reviews = Review.objects.all().filter(store_id=id).order_by('-date_modified')
         tags = reviews.fields('tags')
-        # reviews = self.reviews.objects#(store_id=id)
-        # self.review_form.store_id = id
+        ratings = reviews.average('rating')
         form = self.review_form
 
-        return details, reviews, id, form, tags
+        return details, reviews, id, form, tags, ratings
 
     """def get_queryset(self):
         posts = Review.objects(id=self.kwargs['pk'])[0]
