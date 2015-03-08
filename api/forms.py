@@ -7,7 +7,6 @@ class StoreForm(forms.Form):
     name = forms.CharField(widget=forms.widgets.TextInput())
     description = forms.CharField(widget=forms.widgets.TextInput())
     address1 = forms.CharField(widget=forms.widgets.TextInput())
-    # address2 = forms.CharField(widget=forms.widgets.TextInput())
     city = forms.CharField(widget=forms.widgets.TextInput())
     state = forms.CharField(widget=forms.widgets.TextInput())
     zipcode = forms.CharField(widget=forms.widgets.TextInput())
@@ -18,24 +17,20 @@ class StoreForm(forms.Form):
         self.instance = kwargs.pop('instance', None)
         super(StoreForm, self).__init__(*args, **kwargs)
         if self.instance:
-            # self.fields['title'].initial = self.instance.title
             self.fields['name'].initial = self.instance.name
             self.fields['description'].initial = self.instance.description
             self.fields['address1'].initial = self.instance.address1
-            #self.fields['address2'].initial = self.instance.address2
             self.fields['city'].initial = self.instance.city
             self.fields['state'].initial = self.instance.state
             self.fields['zipcode'].initial = self.instance.zipcode
             self.fields['latitude'].initial = self.instance.latitude
             self.fields['longitude'].initial = self.instance.longitude
 
-
     def save(self, commit=True):
         post = self.instance if self.instance else Store()
         post.name = self.cleaned_data['name']
         post.description = self.cleaned_data['description']
         post.address1 = self.cleaned_data['address1']
-        #post.address2 = self.cleaned_data['address2']
         post.city = self.cleaned_data['city']
         post.state = self.cleaned_data['state']
         post.zipcode = self.cleaned_data['zipcode']
@@ -51,7 +46,7 @@ class ReviewForm(forms.Form):
     CHOICES = (('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'))
     title = forms.CharField(widget=forms.widgets.TextInput())
     text = forms.CharField(widget=forms.widgets.TextInput())
-    tags = forms.CharField(widget=forms.widgets.TextInput())
+    tags = forms.CharField(widget=forms.widgets.Textarea())
     rating = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
     store_id = forms.CharField(widget=forms.widgets.TextInput())
     # date_modified = forms.CharField(widget=forms.widgets.TextInput())
@@ -66,7 +61,6 @@ class ReviewForm(forms.Form):
             self.fields['rating'].initial = self.instance.rating
             self.fields['store_id'].initial = self.instance.store_id
             self.fields['date_modified'].initial = self.instance.date_modified
-
 
     def save(self, commit=True):
         date_modified = datetime.now
