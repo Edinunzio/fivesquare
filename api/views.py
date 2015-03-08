@@ -6,55 +6,71 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from forms import *
 
 
-"""
-class ReviewListView(ListView):
-    model = Review
-    context_object_name = "review_list"
-
-    def get_template_names(self):
-        return ["list.html"]
-
-    def get_queryset(self, store_id):
-        posts = Review.objects
-        return posts
-"""
-
 class StoreListView(ListView):
-    model = Store
-    context_object_name = "store_list"
+    """
+    List of Stores
+    """
+
+    def __init__(self):
+        """
+        setup model and template data var
+        :return:
+        """
+        self.model = Store
+        self.context_object_name = "store_list"
 
     def get_template_names(self):
         return ["list.html"]
 
     def get_queryset(self):
-        posts = Store.objects
+        """
+        Retrieves all store documents
+        #TODO: reduce through geospatial filter AND be wary of reducing return for larger scaled potentials
+        :return:ListView of all stores
+        """
+        # TODO: geospatial filter
+        posts = self.model.objects
         return posts
 
 
 class StoreDetailView(DetailView):
-    model = Store
-    context_object_name = "store"
-    reviews = Review
-    review_form = ReviewForm()
+    """
+    Individual Store Detail View
+    """
+
+    def __init__(self):
+        """
+        setup models, template vars, and form
+        :return:
+        """
+        self.model = Store
+        self.context_object_name = "store"
+        self.reviews = Review
+        self.review_form = ReviewForm()
 
     def get_template_names(self):
         return ["detail.html"]
 
     def get_object(self):
-        id = self.kwargs['pk']
-        details = Store.objects(id=id)[0]
-        reviews = Review.objects.all().filter(store_id=id).order_by('-date_modified')
-        tags = Review.objects.filter(store_id=id).distinct('tags')
+        """
+        Returns reviews filtered by store id, ordered by date modified
+        :return: store details, store reviews, store_id, form inputs, tags, ratings
+        """
+        store_id = self.kwargs['pk']
+        details = self.model.objects(id=store_id)[0]
+        reviews = self.reviews.objects.all().filter(store_id=store_id).order_by('-date_modified')
+        tags = self.reviews.objects.filter(store_id=store_id).distinct('tags')
         ratings = reviews.average('rating')
         form = self.review_form
 
-        return details, reviews, id, form, tags, ratings
+        return details, reviews, store_id, form, tags, ratings
 
 
 class StoreUpdateView(UpdateView):
-    model = Store
-    form_class = StoreForm
-    context_object_name = "post"
+    def __init__(self):
+        self.model = Store
+        self.form_class = StoreForm
+        self.context_object_name = "post"
 
     def get_template_names(self):
         return ["update.html"]
@@ -72,8 +88,9 @@ class StoreUpdateView(UpdateView):
 
 
 class StoreCreateView(CreateView):
-    model = Store
-    form_class = StoreForm
+    def __init__(self):
+        self.model = Store
+        self.form_class = StoreForm
 
     def get_template_names(self):
         return ["create.html"]
@@ -88,7 +105,8 @@ class StoreCreateView(CreateView):
 
 
 class StoreDeleteView(DeleteView):
-    model = Store
+    def __init__(self):
+        self.model = Store
 
     def get_success_url(self):
         return reverse('list')
@@ -108,20 +126,22 @@ class StoreDeleteView(DeleteView):
 
 
 class ReviewDetailView(DetailView):
-    model = Review
-    context_object_name = "review_detail"
+    def __init__(self):
+        self.model = Review
+        self.context_object_name = "review_detail"
 
     def get_template_names(self):
         return ["review_detail.html"]
 
     def get_object(self):
-        objs = Review.objects(id=self.kwargs['pk'])[0]
-        return objs
+        return Review.objects(id=self.kwargs['pk'])[0]
+
 
 class ReviewUpdateView(UpdateView):
-    model = Review
-    form_class = ReviewForm
-    context_object_name = "review_update"
+    def __init__(self):
+        self.model = Review
+        self.form_class = ReviewForm
+        self.context_object_name = "review_update"
 
     def get_template_names(self):
         return ["update.html"]
@@ -139,8 +159,9 @@ class ReviewUpdateView(UpdateView):
 
 
 class ReviewCreateView(CreateView):
-    model = Review
-    form_class = ReviewForm
+    def __init__(self):
+        self.model = Review
+        self.form_class = ReviewForm
 
     def get_template_names(self):
         return ["review.html"]
@@ -156,7 +177,8 @@ class ReviewCreateView(CreateView):
 
 
 class ReviewDeleteView(DeleteView):
-    model = Review
+    def __init__(self):
+        self.model = Review
 
     def get_success_url(self):
         return reverse('list')
