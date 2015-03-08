@@ -2,7 +2,16 @@
 
 {% block content %}
     <div style="margin-bottom: 20px;">
-        {{ review_detail }}
+        <label>Title:</label>{{ review_detail.title }}<br>
+        <label>Review:</label>{{ review_detail.text }}<br>
+        <label>Tags:</label>
+        <ul>
+            {% for tag in review_detail.tags %}
+                <li>{{ tag }}</li>
+            {% endfor %}
+        </ul>
+        <br>
+        <label>Rating:</label>{{ review_detail.rating }}
     </div>
 {% endblock %}
 

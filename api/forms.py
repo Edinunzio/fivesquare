@@ -53,8 +53,11 @@ class ReviewForm(forms.Form):
     text = forms.CharField(widget=forms.widgets.TextInput())
     tags = forms.CharField(widget=forms.widgets.Textarea())
     rating = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
+    store_id = forms.CharField(widget=forms.widgets.TextInput())
+    # store_id = forms.HiddenInput(attrs={"name":"store_id"})
 
     def __init__(self, *args, **kwargs):
+        #self.store_id = kwargs.get('store_id', None)
         self.instance = kwargs.pop('instance', None)
         super(ReviewForm, self).__init__(*args, **kwargs)
         if self.instance:
@@ -62,6 +65,7 @@ class ReviewForm(forms.Form):
             self.fields['text'].initial = self.instance.text
             self.fields['tags'].initial = self.instance.tags
             self.fields['rating'].initial = self.instance.rating
+            self.fields['store_id'].initial = self.instance.store_id
 
 
     def save(self, commit=True):
@@ -70,6 +74,8 @@ class ReviewForm(forms.Form):
         post.text = self.cleaned_data['text']
         post.tags = self.cleaned_data['tags'].split(',')
         post.rating = self.cleaned_data['rating']
+        post.store_id = self.cleaned_data['store_id']
+
         if commit:
             post.save()
 

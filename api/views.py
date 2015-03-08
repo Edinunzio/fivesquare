@@ -6,6 +6,18 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from forms import *
 
 
+class ReviewListView(ListView):
+    model = Review
+    context_object_name = "review_list"
+
+    def get_template_names(self):
+        return ["list.html"]
+
+    def get_queryset(self, store_id):
+        posts = Review.objects
+        return posts
+
+
 class StoreListView(ListView):
     model = Store
     context_object_name = "store_list"
@@ -22,16 +34,37 @@ class StoreDetailView(DetailView):
     model = Store
     context_object_name = "store"
     reviews = Review
+    review_form = ReviewForm()
 
     def get_template_names(self):
         return ["detail.html"]
 
     def get_object(self):
-        return Store.objects(id=self.kwargs['pk'])[0]
+        id = self.kwargs['pk']
+        details = Store.objects(id=id)[0]
+        reviews = Review.objects(store_id=id)
+        # reviews = self.reviews.objects#(store_id=id)
+        self.review_form.store_id = id
+        form = self.review_form
+        #reviews = self.reviews.objects(id=id)
+        print reviews
+        r = []
+        for rx in reviews:
+            r.append(rx)
+        """for r in reviews:
+            try:
+                if r['store_id'] == id:
+                    print r
+            except:
+                if r['store_id'] == id:
+                    print r
+                else:
+                    print 'not in'"""
+        return details, reviews, id, form
 
-    def get_queryset(self):
-        posts = Review.objects
-        return posts
+    """def get_queryset(self):
+        posts = Review.objects(id=self.kwargs['pk'])[0]
+        return posts"""
 
 
 class StoreUpdateView(UpdateView):
@@ -93,7 +126,7 @@ class StoreDeleteView(DeleteView):
 
 # Reviews
 
-class ReviewListView(ListView):
+"""class ReviewListView(ListView):
     model = Review
     context_object_name = "review_list"
 
@@ -102,7 +135,7 @@ class ReviewListView(ListView):
 
     def get_queryset(self):
         posts = Review.objects
-        return posts
+        return posts"""
 
 
 class ReviewDetailView(DetailView):
@@ -113,7 +146,8 @@ class ReviewDetailView(DetailView):
         return ["review_detail.html"]
 
     def get_object(self):
-        return Review.objects(id=self.kwargs['pk'])[0]
+        objs = Review.objects(id=self.kwargs['pk'])[0]
+        return objs
 
 class ReviewUpdateView(UpdateView):
     model = Review
@@ -140,7 +174,7 @@ class ReviewCreateView(CreateView):
     form_class = ReviewForm
 
     def get_template_names(self):
-        return ["create.html"]
+        return ["review.html"]
 
     def get_success_url(self):
         return reverse('list')

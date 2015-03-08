@@ -8,18 +8,26 @@ class User(Document):
     last_name = StringField(max_length=50)
 
 
+# class Review(EmbeddedDocument):
 class Review(Document):
     # user = ReferenceField(User, reverse_delete_rule=CASCADE)
     title = StringField(max_length=200, required=True)
     text = StringField(required=True)
     tags = ListField(StringField(max_length=30))
     rating = IntField(min_value=1, max_value=5)
+    store_id = StringField()
+
+
+    def get_store_id(self, store_id):
+        self.store_id = store_id
+        return store_id
 
     def __unicode__(self):
         return self.title
 
     def save(self, *args, **kwargs):
-        return super(Review, self).save(*args, **kwargs)
+        return super(Review,
+                     self).save()  #title=self.title, text=self.text, tags=self.tags, rating=self.rating, store_id=self.store_id)
 
     def get_absolute_url(self):
         return reverse('review_detail', args=[self.id])
@@ -49,10 +57,10 @@ class Store(Document):
     # text_length = IntField()
     #date_modified = DateTimeField(default=datetime.now)
     tags = ListField(EmbeddedDocumentField(Tags))
-    # reviews = ListField(EmbeddedDocumentField(Review))
+    #reviews = ListField(EmbeddedDocumentField(Review))
 
     def __unicode__(self):
-        return self.title
+        return self.name
 
     def save(self, *args, **kwargs):
         # self.text_length = len(self.text)

@@ -2,15 +2,39 @@
 
 {% block content %}
 	<div style="margin-bottom: 20px;">
-        <h4>{{ store.name }}</h4>
-        {{ store.address1 }}
-        {{ store.city }},{{ store.state }} {{ store.zipcode }}
-        <a href="{{ store.get_edit_url }}" class="btn btn-small">Edit</a>
-        <a href="{{ store.get_delete_url }}" class="btn btn-small">Delete</a>
-        {{ store.posts }}
+        <h4>{{ store.0 }}</h4>
+        {{ store.0.address1 }}
+        {{ store.0.city }},{{ store.0.state }} {{ store.0.zipcode }}
+        <a href="{{ store.0.get_edit_url }}" class="btn btn-small">Edit</a>
+        <a href="{{ store.0.get_delete_url }}" class="btn btn-small">Delete</a>
 	</div>
     <div>
-        <a href="{% url "review_create" %}">Add a review</a>
+        <a href="{% url "review_create" %}?id={{ store.2 }}">Add a review</a>
+
+        <form action="{% url "review_create" %}" method="post">{% csrf_token %}
+            <label>{{ store.3.title.label_tag }}</label>{{ store.3.title }}
+            <label>{{ store.3.text.label_tag }}</label>{{ store.3.text }}
+            <label>{{ store.3.tags.label_tag }}</label>{{ store.3.tags }}
+            <label>{{ store.3.rating.label_tag }}</label>{{ store.3.rating }}
+            <input style="display: none;" type="text" id="id_store_id" name="store_id" value="{{ store.2 }}"/>
+            <input type="submit"/>
+        </form>
+    </div>
+    <div>
+        <h4>Reviews</h4>
+
+
+        {% for review in store.1 %}
+            {{ review }}
+            <div>{{ review.id }}
+                {{ review.title }}
+                {{ review.text }}
+                {{ review.tags }}
+                {{ review.ratings }}
+                {{ review.store_id }}
+            </div>
+        {% endfor %}
+
     </div>
 {% endblock %}
 
