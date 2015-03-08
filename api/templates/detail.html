@@ -9,7 +9,9 @@
         <div>
             <label>Tags:</label>
             {% for tags in store.4 %}
-                {{ tags.tags }}
+                {% for tag in tags.tags %}
+                    {{ tag }}
+                {% endfor %}
             {% endfor %}
         </div>
         <a href="{{ store.0.get_edit_url }}" class="btn btn-small">Edit</a>
