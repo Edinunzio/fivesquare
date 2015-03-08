@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from forms import *
 
 
+"""
 class ReviewListView(ListView):
     model = Review
     context_object_name = "review_list"
@@ -16,7 +17,7 @@ class ReviewListView(ListView):
     def get_queryset(self, store_id):
         posts = Review.objects
         return posts
-
+"""
 
 class StoreListView(ListView):
     model = Store
