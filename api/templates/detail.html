@@ -4,39 +4,48 @@
     <div class="row">
         <div class="col-md-12" style="margin-bottom: 20px;">
             <h1>{{ store.0 }}</h1>
-        {{ store.0.address1 }}
-            {{ store.0.city }}, {{ store.0.state }} {{ store.0.zipcode }}<br>
+
+            {{ store.0.address1 }}
+            {{ store.0.city }}, {{ store.0.state }} {{ store.0.zipcode }}<br><br>
+            Latitude: {{ store.0.latitude }}
+            Longitude: {{ store.0.longitude }}<br><br>
+
+            <a href="{{ store.0.get_edit_url }}" class="btn btn-small">Edit</a>
+            <a href="{{ store.0.get_delete_url }}" class="btn btn-small">Delete</a><br>
+            <hr>
             {% if store.1.count > 0 %}
-                <div>
-                    <label>Tags:</label>
-                    {% for tag in store.4 %}
-                        {{ tag }}
-                    {% endfor %}
-                </div>
-                <div>
-                    <label>Average Rating:</label>
-                    {{ store.5 }}
-                </div>
-                <a href="{{ store.0.get_edit_url }}" class="btn btn-small">Edit</a>
-                <a href="{{ store.0.get_delete_url }}" class="btn btn-small">Delete</a>
+
+                <h5>Tags:</h5>
+                <ul>{% for tag in store.4 %}
+                    <li>{{ tag }}</li>
+                {% endfor %}</ul>
+
+                <strong>Average Rating: </strong>{{ store.5 }}
+
+
+
     </div>
                 </div>
                 <div class="row">
                 <div class="col-md-12">
                 <div>
-                    <h4>Reviews</h4>
+                    <hr>
+                    <h3>Reviews</h3>
                     {% for review in store.1 %}
                         <div>
-                            <span>Review Title:</span> {{ review.title }}<br>
-                            <span>Review Body:</span> {{ review.text }}<br>
-                            <span>Tags:</span><br>
+                            <h5>{{ review.title }}</h5>
+                            <strong>Published:</strong> {{ review.date_modified }}<br>
+                            <strong>Message:</strong>
+
+                            <p>{{ review.text }}</p>
+                            <h5>Tags:</h5>
                             <ul>
                                 {% for tag in review.tags %}
                                     <li>{{ tag }}</li>
                                 {% endfor %}
                             </ul>
-                            <span>Review Rating:</span> {{ review.rating }}<br>
-                            <span>Date Published:</span> {{ review.date_modified }}
+                            <strong>Rating: </strong> {{ review.rating }}<br>
+
                         </div><br>
                         <a href="{{ review.get_delete_url }}" class="btn btn-small">Delete</a>
                     {% endfor %}
