@@ -9,32 +9,36 @@
         <a href="{{ store.0.get_delete_url }}" class="btn btn-small">Delete</a>
 	</div>
     <div>
-        <a href="{% url "review_create" %}?id={{ store.2 }}">Add a review</a>
+        <h4>Reviews</h4>
+
+
+        {% for review in store.1 %}
+            <div><span>Review ID:</span> {{ review.id }}<br>
+                <span>Review Title:</span> {{ review.title }}<br>
+                <span>Review Body:</span> {{ review.text }}<br>
+                <span>Tags:</span><br>
+                <ul>
+                    {% for tag in review.tags %}
+                        <li>{{ tag }}</li>
+                    {% endfor %}
+                </ul>
+                <span>Review Rating:</span> {{ review.rating }}<br>
+                <span>Store ID:</span> {{ review.store_id }}
+            </div><br>
+        {% endfor %}
+    </div>
+    <hr>
+    <div>
+        <h4>Add a review</h4>
 
         <form action="{% url "review_create" %}" method="post">{% csrf_token %}
             <label>{{ store.3.title.label_tag }}</label>{{ store.3.title }}
             <label>{{ store.3.text.label_tag }}</label>{{ store.3.text }}
             <label>{{ store.3.tags.label_tag }}</label>{{ store.3.tags }}
             <label>{{ store.3.rating.label_tag }}</label>{{ store.3.rating }}
-            <input style="display: none;" type="text" id="id_store_id" name="store_id" value="{{ store.2 }}"/>
+            <input type="hidden" id="id_store_id" name="store_id" value="{{ store.2 }}"/>
             <input type="submit"/>
         </form>
-    </div>
-    <div>
-        <h4>Reviews</h4>
-
-
-        {% for review in store.1 %}
-            {{ review }}
-            <div>{{ review.id }}
-                {{ review.title }}
-                {{ review.text }}
-                {{ review.tags }}
-                {{ review.ratings }}
-                {{ review.store_id }}
-            </div>
-        {% endfor %}
-
     </div>
 {% endblock %}
 
