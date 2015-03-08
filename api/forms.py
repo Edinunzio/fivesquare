@@ -54,10 +54,8 @@ class ReviewForm(forms.Form):
     tags = forms.CharField(widget=forms.widgets.Textarea())
     rating = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
     store_id = forms.CharField(widget=forms.widgets.TextInput())
-    # store_id = forms.HiddenInput(attrs={"name":"store_id"})
 
     def __init__(self, *args, **kwargs):
-        #self.store_id = kwargs.get('store_id', None)
         self.instance = kwargs.pop('instance', None)
         super(ReviewForm, self).__init__(*args, **kwargs)
         if self.instance:

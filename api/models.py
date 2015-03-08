@@ -8,9 +8,7 @@ class User(Document):
     last_name = StringField(max_length=50)
 
 
-# class Review(EmbeddedDocument):
 class Review(Document):
-    # user = ReferenceField(User, reverse_delete_rule=CASCADE)
     title = StringField(max_length=200, required=True)
     text = StringField(required=True)
     tags = ListField(StringField(max_length=30))
@@ -27,7 +25,7 @@ class Review(Document):
 
     def save(self, *args, **kwargs):
         return super(Review,
-                     self).save()  #title=self.title, text=self.text, tags=self.tags, rating=self.rating, store_id=self.store_id)
+                     self).save()
 
     def get_absolute_url(self):
         return reverse('review_detail', args=[self.id])
@@ -44,7 +42,6 @@ class Tags(EmbeddedDocument):
 
 
 class Store(Document):
-    # user = ReferenceField(User, reverse_delete_rule=CASCADE)
     name = StringField(max_length=200, required=True)
     description = StringField(required=True)
     address1 = StringField(required=True)
@@ -54,16 +51,11 @@ class Store(Document):
     zipcode = IntField()
     latitude = StringField()
     longitude = StringField()
-    # text_length = IntField()
-    #date_modified = DateTimeField(default=datetime.now)
-    tags = ListField(EmbeddedDocumentField(Tags))
-    #reviews = ListField(EmbeddedDocumentField(Review))
 
     def __unicode__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        # self.text_length = len(self.text)
         return super(Store, self).save(*args, **kwargs)
 
     def get_absolute_url(self):

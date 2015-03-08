@@ -43,24 +43,12 @@ class StoreDetailView(DetailView):
         id = self.kwargs['pk']
         details = Store.objects(id=id)[0]
         reviews = Review.objects(store_id=id)
+        tags = reviews.fields('tags')
         # reviews = self.reviews.objects#(store_id=id)
         self.review_form.store_id = id
         form = self.review_form
-        #reviews = self.reviews.objects(id=id)
-        print reviews
-        r = []
-        for rx in reviews:
-            r.append(rx)
-        """for r in reviews:
-            try:
-                if r['store_id'] == id:
-                    print r
-            except:
-                if r['store_id'] == id:
-                    print r
-                else:
-                    print 'not in'"""
-        return details, reviews, id, form
+
+        return details, reviews, id, form, tags
 
     """def get_queryset(self):
         posts = Review.objects(id=self.kwargs['pk'])[0]

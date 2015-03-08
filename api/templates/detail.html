@@ -4,7 +4,14 @@
 	<div style="margin-bottom: 20px;">
         <h4>{{ store.0 }}</h4>
         {{ store.0.address1 }}
-        {{ store.0.city }},{{ store.0.state }} {{ store.0.zipcode }}
+        {{ store.0.city }},{{ store.0.state }} {{ store.0.zipcode }}<br>
+
+        <div>
+            <label>Tags:</label>
+            {% for tags in store.4 %}
+                {{ tags.tags }}
+            {% endfor %}
+        </div>
         <a href="{{ store.0.get_edit_url }}" class="btn btn-small">Edit</a>
         <a href="{{ store.0.get_delete_url }}" class="btn btn-small">Delete</a>
 	</div>
