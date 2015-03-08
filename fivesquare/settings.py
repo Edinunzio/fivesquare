@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'le)&ly2(h+py3-u5@@-04j2d#jx_(m=84^)vig%ypl7u_@v3$6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'api',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -63,6 +64,15 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+    'mongoengine.django.auth.MongoEngineBackend',
+)
+
+SESSION_ENGINE = 'mongoengine.django.sessions'
+
+MONGO_DATABASE_NAME = 'api'
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -83,3 +93,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 GEOIP_DATA_FILE = os.path.join(BASE_DIR, 'fivesquare/_extras/GeoLite2-City.mmdb')
+
+try:
+    from local.settings import *
+except ImportError as e:
+    print e.message
+
+from mongoengine import connect
+connect(MONGO_DATABASE_NAME)
