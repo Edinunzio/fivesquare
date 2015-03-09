@@ -17,6 +17,7 @@ class StoreListView(ListView):
         :return:
         """
         self.model = Store
+        self.location = Location
         self.context_object_name = "store_list"
 
     def get_template_names(self):
@@ -29,7 +30,18 @@ class StoreListView(ListView):
         :return:ListView of all stores
         """
         # TODO: geospatial filter
+        # posts = self.model.objects(point__geo_within_sphere=[(-125.0, 35.0), 1])
         posts = self.model.objects
+        p = {}
+        for post in posts:
+            post['loc'] = self.location([post['longitude'], post['latitude']])
+            # p.update(self.location([post['longitude'], post['latitude']]))
+            #self.model.loc = self.location([post['longitude'], post['latitude']])
+            #p['loc'] = [float(post['longitude']), float(post['latitude'])]#self.location.point(post['longitude'], post['latitude'])
+        # fields = self.model.objects(('longitude','latitude'))
+        local_point = self.location((float(-74.0), float(40.64)))
+        x = posts.filter(point__geo_within_sphere=([local_point, 10000]))
+        #y = posts.filter(poi)
         return posts
 
 
@@ -77,6 +89,7 @@ class StoreUpdateView(UpdateView):
         """
         self.model = Store
         self.form_class = StoreForm
+        self.location = Location
         self.context_object_name = "post"
 
     def get_template_names(self):
@@ -92,6 +105,7 @@ class StoreUpdateView(UpdateView):
         :return:
         """
         self.object = form.save()
+        self.model.loc = self.location([form['longitude'], form['latitude']])
         messages.success(self.request, "The store has been updated.")
         return super(StoreUpdateView, self).form_valid(form)
 
@@ -113,6 +127,7 @@ class StoreCreateView(CreateView):
         :return:
         """
         self.model = Store
+        self.location = Location
         self.form_class = StoreForm
 
     def get_template_names(self):
@@ -128,6 +143,7 @@ class StoreCreateView(CreateView):
         :return:
         """
         self.object = form.save(commit=False)
+        self.model.loc = self.location([form['longitude'], form['latitude']])
         messages.success(self.request, "The store has been posted.")
         return super(StoreCreateView, self).form_valid(form)
 

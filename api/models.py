@@ -39,6 +39,10 @@ class Review(Document):
         return reverse('review_delete', args=[self.id])
 
 
+class Location(Document):
+    point = PointField()
+
+
 class Store(Document):
     name = StringField(max_length=200, required=True)
     description = StringField(required=True)
@@ -46,8 +50,13 @@ class Store(Document):
     city = StringField(required=True)
     state = StringField(required=True)
     zipcode = IntField()
-    latitude = StringField()
-    longitude = StringField()
+    latitude = FloatField()
+    longitude = FloatField()
+    loc = PointField()
+    # look into db to verify this
+    # location = {}
+    #location['type'] = "Point"
+    #location['coordinates'] = [longitude, latitude]
 
     def __unicode__(self):
         return self.name

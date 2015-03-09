@@ -10,8 +10,8 @@ class StoreForm(forms.Form):
     city = forms.CharField(widget=forms.widgets.TextInput())
     state = forms.CharField(widget=forms.widgets.TextInput())
     zipcode = forms.CharField(widget=forms.widgets.TextInput())
-    latitude = forms.CharField(widget=forms.widgets.TextInput())
-    longitude = forms.CharField(widget=forms.widgets.TextInput())
+    latitude = forms.FloatField(widget=forms.widgets.TextInput())  # forms.CharField(widget=forms.widgets.TextInput())
+    longitude = forms.FloatField(widget=forms.widgets.TextInput())
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
@@ -36,6 +36,7 @@ class StoreForm(forms.Form):
         post.zipcode = self.cleaned_data['zipcode']
         post.latitude = self.cleaned_data['latitude']
         post.longitude = self.cleaned_data['longitude']
+        post.location = [post.longitude, post.latitude]
         if commit:
             post.save()
 
