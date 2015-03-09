@@ -31,16 +31,17 @@ class StoreListView(ListView):
         """
         # TODO: geo query
         # posts = self.model.objects(point__geo_within_sphere=[(-125.0, 35.0), 1])
-        posts = self.model.objects
+        posts = self.model.objects  # (loc__geo_within_sphere=([(-75.0, 50.0), 5000])).limit(3)
         p = {}
         for post in posts:
             post['loc'] = self.location([post['longitude'], post['latitude']])
 
         local_point = self.location((-74.0, 40.64))
         # x = posts(point__geo_within_sphere=([(-74.0, 40.64), 1])).limit(3)
-        x = posts.filter(point__geo_within_sphere=([(-78.0, 50.64)])).limit(3)
+        # x = posts(loc__geo_within_distance=([(-78.0, 50.64), 5])).limit(3)
+        #z = self.location.objects(point__geo_within_distance=([(-78.0, 50.64), 5])).limit(3)
         #y = self.location.objects(point__geo_within_sphere=[(-125.0, 35.0), 1])
-        #y = self.location.objects(point__near=([(-75.0, 50.0), 5])).limit(3)
+        y = self.location.objects(point__geo_within_sphere=([(-125.0, 35.0)])).limit(3)
         #z = Location.objects.all().get('loc')
 
 
