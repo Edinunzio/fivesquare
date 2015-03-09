@@ -29,19 +29,30 @@ class StoreListView(ListView):
         #TODO: reduce through geospatial filter AND be wary of reducing return for larger scaled potentials
         :return:ListView of all stores
         """
-        # TODO: geospatial filter
+        # TODO: geo query
         # posts = self.model.objects(point__geo_within_sphere=[(-125.0, 35.0), 1])
         posts = self.model.objects
         p = {}
         for post in posts:
             post['loc'] = self.location([post['longitude'], post['latitude']])
-            # p.update(self.location([post['longitude'], post['latitude']]))
-            #self.model.loc = self.location([post['longitude'], post['latitude']])
-            #p['loc'] = [float(post['longitude']), float(post['latitude'])]#self.location.point(post['longitude'], post['latitude'])
-        # fields = self.model.objects(('longitude','latitude'))
-        local_point = self.location((float(-74.0), float(40.64)))
-        x = posts.filter(point__geo_within_sphere=([local_point, 10000]))
-        #y = posts.filter(poi)
+
+        local_point = self.location((-74.0, 40.64))
+        # x = posts(point__geo_within_sphere=([(-74.0, 40.64), 1])).limit(3)
+        x = posts.filter(point__geo_within_sphere=([(-78.0, 50.64)])).limit(3)
+        #y = self.location.objects(point__geo_within_sphere=[(-125.0, 35.0), 1])
+        #y = self.location.objects(point__near=([(-75.0, 50.0), 5])).limit(3)
+        #z = Location.objects.all().get('loc')
+
+
+        """for post in posts():#{"loc": {"$near": local_point}}):
+
+            p.update({post})
+        for doc in self.to_mongo().find({"loc": {"$near": local_point}}).limit(3):
+            repr(doc)
+            print doc"""
+
+        #x = self.model.find({"loc": {"$near": local_point}})
+        #y = self.location(point__geo_within_sphere=([local_point, 5000]))
         return posts
 
 

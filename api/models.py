@@ -53,10 +53,6 @@ class Store(Document):
     latitude = FloatField()
     longitude = FloatField()
     loc = PointField()
-    # look into db to verify this
-    # location = {}
-    #location['type'] = "Point"
-    #location['coordinates'] = [longitude, latitude]
 
     def __unicode__(self):
         return self.name
