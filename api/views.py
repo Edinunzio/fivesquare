@@ -23,37 +23,31 @@ class StoreListView(ListView):
     def get_template_names(self):
         return ["list.html"]
 
+    def create_geo_index(self):
+        db = Connection().geo_example
+        db.places.create_index([("loc", GEO2D)])
+
     def get_queryset(self):
         """
         Retrieves all store documents
         #TODO: reduce through geospatial filter AND be wary of reducing return for larger scaled potentials
         :return:ListView of all stores
         """
-        # TODO: geo query
+
         # posts = self.model.objects(point__geo_within_sphere=[(-125.0, 35.0), 1])
         posts = self.model.objects  # (loc__geo_within_sphere=([(-75.0, 50.0), 5000])).limit(3)
-        p = {}
+        p = []
+        db = Connection().geo_example
         for post in posts:
+            db.places.insert({"loc": [post['longitude'], post['latitude']], "id": post["id"]})
             post['loc'] = self.location([post['longitude'], post['latitude']])
 
-        local_point = self.location((-74.0, 40.64))
-        # x = posts(point__geo_within_sphere=([(-74.0, 40.64), 1])).limit(3)
-        # x = posts(loc__geo_within_distance=([(-78.0, 50.64), 5])).limit(3)
-        #z = self.location.objects(point__geo_within_distance=([(-78.0, 50.64), 5])).limit(3)
-        #y = self.location.objects(point__geo_within_sphere=[(-125.0, 35.0), 1])
-        y = self.location.objects(point__geo_within_sphere=([(-125.0, 35.0)])).limit(3)
-        #z = Location.objects.all().get('loc')
-
-
-        """for post in posts():#{"loc": {"$near": local_point}}):
-
-            p.update({post})
-        for doc in self.to_mongo().find({"loc": {"$near": local_point}}).limit(3):
+        for doc in db.places.find({"loc": {"$near": [-78.0, 40.64]}}).limit(3):
             repr(doc)
-            print doc"""
+            p.append(doc)
 
-        #x = self.model.find({"loc": {"$near": local_point}})
-        #y = self.location(point__geo_within_sphere=([local_point, 5000]))
+        local_point = self.location((-74.0, 40.64))
+
         return posts
 
 

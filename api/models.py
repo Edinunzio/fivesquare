@@ -1,8 +1,14 @@
 from datetime import datetime
 
+from pymongo import Connection, GEO2D
+
 from mongoengine import *
 from django.core.urlresolvers import reverse
 
+
+class GeoSpatial_Index(Document):
+    db = Connection().geo_example
+    db.places.create_index([("loc", GEO2D)])
 
 class User(Document):
     email = StringField(required=True)
