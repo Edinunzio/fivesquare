@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-
     {% for post in store_list %}
 		<div style="margin-bottom: 20px;">
-            <h4>{{ post.name }}</h4>
-            {{ post.address1 }}
-            {{ post.city }},{{ post.state }} {{ post.zipcode }}
-            <a href="{{ post.get_absolute_url }}" class="btn btn-small">Read</a>
-            <a href="{{ post.get_edit_url }}" class="btn btn-small">Edit</a>
-            <a href="{{ post.get_delete_url }}" class="btn btn-small">Delete</a>
+            <h4>{{ post.store_info.name }}</h4>
+            {{ post.store_info.address1 }}
+            {{ post.store_info.city }},{{ post.store_info.state }} {{ post.store_info.zipcode }}
+            <a href="{{ post.store_info.get_absolute_url }}" class="btn btn-small">Read</a>
+            <a href="{{ post.store_info.get_edit_url }}" class="btn btn-small">Edit</a>
+            <a href="{{ post.store_info.get_delete_url }}" class="btn btn-small">Delete</a>
 		</div>
 	{% endfor %}
 {% endblock %}

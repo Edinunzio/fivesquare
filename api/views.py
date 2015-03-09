@@ -24,7 +24,7 @@ class StoreListView(ListView):
         return ["list.html"]
 
     def create_geo_index(self):
-        db = Connection().geo_example
+        db = Connection().geo_example  # TODO: dynamicize this
         db.places.create_index([("loc", GEO2D)])
 
     def get_queryset(self):
@@ -37,18 +37,24 @@ class StoreListView(ListView):
         # posts = self.model.objects(point__geo_within_sphere=[(-125.0, 35.0), 1])
         posts = self.model.objects  # (loc__geo_within_sphere=([(-75.0, 50.0), 5000])).limit(3)
         p = []
-        db = Connection().geo_example
+        db = Connection().geo_stores
+        #db.places.create_index([("loc", GEO2D)]) # for build only
         for post in posts:
-            db.places.insert({"loc": [post['longitude'], post['latitude']], "id": post["id"]})
+            #db.places.insert({"loc": [post['longitude'], post['latitude']], "store_info": {"id": post['id'], "name": post["name"], "address": post["address1"], "city": post["city"], "state": post["state"], "zipcode": post["zipcode"] }})
             post['loc'] = self.location([post['longitude'], post['latitude']])
+            print post['name']
+            print post['longitude']
+            print post['latitude']
 
+        #for doc in db.places.find({"loc": {"$near": [-78.0, 40.64]}}).limit(3):
         for doc in db.places.find({"loc": {"$near": [-78.0, 40.64]}}).limit(3):
             repr(doc)
             p.append(doc)
 
+        filtered_stores = [doc for doc in db.places.find({"loc": {"$near": [-78.0, 40.64]}}).limit(3)]
         local_point = self.location((-74.0, 40.64))
-
-        return posts
+        _posts = p
+        return _posts
 
 
 class StoreDetailView(DetailView):
