@@ -31,23 +31,21 @@ class StoreListView(ListView):
 
         :return:ListView of all stores
         """
-        p = []
-        stores = self.model.objects
+        _posts = []
         db = Connection().geo_businesses
 
         if 'limit' in self.request.GET:
             lm = int(self.request.GET["limit"])
             for doc in db.places.find({"loc": {"$near": coord}}).limit(lm):
                 repr(doc)
-                p.append(doc)
+                _posts.append(doc)
         else:
             for doc in db.places.find({"loc": {"$near": coord}}):
                 repr(doc)
-                p.append(doc)
+                _posts.append(doc)
 
-        # _posts = stores
-        _posts = p
-        return _posts
+        posts = _posts
+        return posts
 
 
 class StoreDetailView(DetailView):
@@ -94,7 +92,6 @@ class StoreUpdateView(UpdateView):
         """
         self.model = Store
         self.form_class = StoreForm
-        # self.location = Location
         self.geo_index = GeoIndex
         self.context_object_name = "post"
 
@@ -111,8 +108,6 @@ class StoreUpdateView(UpdateView):
         :return:
         """
         self.object = form.save()
-        # self.model.loc = self.location([form['longitude'], form['latitude']])
-        #self.geo_index.insert_store_by_location([form])
         messages.success(self.request, "The store has been updated.")
         return super(StoreUpdateView, self).form_valid(form)
 
@@ -150,8 +145,6 @@ class StoreCreateView(CreateView):
         :return:
         """
         self.object = form.save(commit=False)
-        # self.model.loc = self.location([form['longitude'], form['latitude']])
-        #self.geo_index.insert_store_by_location([form])
         messages.success(self.request, "The store has been posted.")
         return super(StoreCreateView, self).form_valid(form)
 

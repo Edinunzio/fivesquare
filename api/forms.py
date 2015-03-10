@@ -10,7 +10,7 @@ class StoreForm(forms.Form):
     city = forms.CharField(widget=forms.widgets.TextInput())
     state = forms.CharField(widget=forms.widgets.TextInput())
     zipcode = forms.CharField(widget=forms.widgets.TextInput())
-    latitude = forms.FloatField(widget=forms.widgets.TextInput())  # forms.CharField(widget=forms.widgets.TextInput())
+    latitude = forms.FloatField(widget=forms.widgets.TextInput())
     longitude = forms.FloatField(widget=forms.widgets.TextInput())
 
     def __init__(self, *args, **kwargs):
@@ -36,9 +36,14 @@ class StoreForm(forms.Form):
         post.zipcode = self.cleaned_data['zipcode']
         post.latitude = self.cleaned_data['latitude']
         post.longitude = self.cleaned_data['longitude']
-        # post.location = [post.longitude, post.latitude]
         if commit:
             post.save()
+        # inserts store info into geo_businesses db
+        db = Connection().geo_businesses
+        db.places.insert({"loc": [post['longitude'], post['latitude']],
+                          "store_info": {"id": post['id'], "name": post["name"], "address": post["address1"],
+                                         "city": post["city"], "state": post["state"],
+                                         "zipcode": post["zipcode"]}})
 
         return post
 
