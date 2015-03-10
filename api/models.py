@@ -6,9 +6,23 @@ from mongoengine import *
 from django.core.urlresolvers import reverse
 
 
-class GeoSpatial_Index(Document):
-    db = Connection().geo_example
-    db.places.create_index([("loc", GEO2D)])
+class GeoIndex(Document):
+    def insert_store_by_location(self, db, stores):
+        db = Connection().geo_stores
+        db.places.create_index([("loc", GEO2D)])
+        for store in stores:
+            db.places.insert({"loc": [store['longitude'], store['latitude']],
+                              "store_info": {"id": store['id'], "name": store["name"], "address": store["address1"],
+                                             "city": store["city"], "state": store["state"],
+                                             "zipcode": store["zipcode"]}})
+
+    def filter_by_point(self, db, longitude, latitude, lm):
+        results = []
+        for doc in db.places.find({"loc": {"$near": [longitude, latitude]}}).limit(lm):
+            repr(doc)
+            results.append(doc)
+        return results
+
 
 class User(Document):
     email = StringField(required=True)

@@ -3,6 +3,8 @@ from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
+from fivesquare.settings import MY_LOCATION
+
 from forms import *
 
 
@@ -23,38 +25,29 @@ class StoreListView(ListView):
     def get_template_names(self):
         return ["list.html"]
 
-    def create_geo_index(self):
-        db = Connection().geo_example  # TODO: dynamicize this
-        db.places.create_index([("loc", GEO2D)])
 
-    def get_queryset(self):
+    def get_queryset(self, coord=MY_LOCATION, lm=None):
         """
         Retrieves all store documents
-        #TODO: reduce through geospatial filter AND be wary of reducing return for larger scaled potentials
+
         :return:ListView of all stores
         """
-
-        # posts = self.model.objects(point__geo_within_sphere=[(-125.0, 35.0), 1])
-        posts = self.model.objects  # (loc__geo_within_sphere=([(-75.0, 50.0), 5000])).limit(3)
         p = []
         db = Connection().geo_stores
-        #db.places.create_index([("loc", GEO2D)]) # for build only
-        for post in posts:
-            #db.places.insert({"loc": [post['longitude'], post['latitude']], "store_info": {"id": post['id'], "name": post["name"], "address": post["address1"], "city": post["city"], "state": post["state"], "zipcode": post["zipcode"] }})
-            post['loc'] = self.location([post['longitude'], post['latitude']])
-            print post['name']
-            print post['longitude']
-            print post['latitude']
+        if 'limit' in self.request.GET:
+            lm = int(self.request.GET["limit"])
+            for doc in db.places.find({"loc": {"$near": coord}}).limit(lm):
+                repr(doc)
+                p.append(doc)
+        else:
+            for doc in db.places.find({"loc": {"$near": coord}}):
+                repr(doc)
+                p.append(doc)
 
-        #for doc in db.places.find({"loc": {"$near": [-78.0, 40.64]}}).limit(3):
-        for doc in db.places.find({"loc": {"$near": [-78.0, 40.64]}}).limit(3):
-            repr(doc)
-            p.append(doc)
-
-        filtered_stores = [doc for doc in db.places.find({"loc": {"$near": [-78.0, 40.64]}}).limit(3)]
-        local_point = self.location((-74.0, 40.64))
+        # local_point = self.location((-74.0, 40.64))
         _posts = p
-        return _posts
+
+        return reversed(_posts)
 
 
 class StoreDetailView(DetailView):

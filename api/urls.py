@@ -5,6 +5,7 @@ from views import StoreCreateView, StoreDetailView, StoreUpdateView, StoreDelete
 
 
 urlpatterns = patterns('',
+                       # url(r'^all/$', StoreListView.as_view(), name='list'),
                        url(r'^add/$', StoreCreateView.as_view(), name='create'),
                        url(r'^(?P<pk>[\w\d]+)/$', StoreDetailView.as_view(), name='detail'),
                        url(r'^edit/(?P<pk>[\w\d]+)/$', StoreUpdateView.as_view(), name='update'),

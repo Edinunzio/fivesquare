@@ -4,7 +4,7 @@
     {% for post in store_list %}
 		<div style="margin-bottom: 20px;">
             <h4>{{ post.store_info.name }}</h4>
-            {{ post.store_info.address1 }}
+            {{ post.store_info.address }}
             {{ post.store_info.city }},{{ post.store_info.state }} {{ post.store_info.zipcode }}
             <a href="{{ post.store_info.get_absolute_url }}" class="btn btn-small">Read</a>
             <a href="{{ post.store_info.get_edit_url }}" class="btn btn-small">Edit</a>
