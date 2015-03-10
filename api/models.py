@@ -7,14 +7,13 @@ from django.core.urlresolvers import reverse
 
 
 class GeoIndex(Document):
-    def insert_store_by_location(self, db, stores):
+    def insert_store_by_location(self, store):
         db = Connection().geo_stores
         db.places.create_index([("loc", GEO2D)])
-        for store in stores:
-            db.places.insert({"loc": [store['longitude'], store['latitude']],
-                              "store_info": {"id": store['id'], "name": store["name"], "address": store["address1"],
-                                             "city": store["city"], "state": store["state"],
-                                             "zipcode": store["zipcode"]}})
+        db.places.insert({"loc": [store['longitude'], store['latitude']],
+                          "store_info": {"id": store['id'], "name": store["name"], "address": store["address1"],
+                                         "city": store["city"], "state": store["state"],
+                                         "zipcode": store["zipcode"]}})
 
     def filter_by_point(self, db, longitude, latitude, lm):
         results = []

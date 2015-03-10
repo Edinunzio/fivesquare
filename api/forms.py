@@ -36,7 +36,7 @@ class StoreForm(forms.Form):
         post.zipcode = self.cleaned_data['zipcode']
         post.latitude = self.cleaned_data['latitude']
         post.longitude = self.cleaned_data['longitude']
-        post.location = [post.longitude, post.latitude]
+        # post.location = [post.longitude, post.latitude]
         if commit:
             post.save()
 

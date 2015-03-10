@@ -4,7 +4,6 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from fivesquare.settings import MY_LOCATION
-
 from forms import *
 
 
@@ -33,7 +32,9 @@ class StoreListView(ListView):
         :return:ListView of all stores
         """
         p = []
-        db = Connection().geo_stores
+        stores = self.model.objects
+        db = Connection().geo_businesses
+
         if 'limit' in self.request.GET:
             lm = int(self.request.GET["limit"])
             for doc in db.places.find({"loc": {"$near": coord}}).limit(lm):
@@ -44,10 +45,9 @@ class StoreListView(ListView):
                 repr(doc)
                 p.append(doc)
 
-        # local_point = self.location((-74.0, 40.64))
+        # _posts = stores
         _posts = p
-
-        return reversed(_posts)
+        return _posts
 
 
 class StoreDetailView(DetailView):
@@ -94,7 +94,8 @@ class StoreUpdateView(UpdateView):
         """
         self.model = Store
         self.form_class = StoreForm
-        self.location = Location
+        # self.location = Location
+        self.geo_index = GeoIndex
         self.context_object_name = "post"
 
     def get_template_names(self):
@@ -110,7 +111,8 @@ class StoreUpdateView(UpdateView):
         :return:
         """
         self.object = form.save()
-        self.model.loc = self.location([form['longitude'], form['latitude']])
+        # self.model.loc = self.location([form['longitude'], form['latitude']])
+        #self.geo_index.insert_store_by_location([form])
         messages.success(self.request, "The store has been updated.")
         return super(StoreUpdateView, self).form_valid(form)
 
@@ -148,7 +150,8 @@ class StoreCreateView(CreateView):
         :return:
         """
         self.object = form.save(commit=False)
-        self.model.loc = self.location([form['longitude'], form['latitude']])
+        # self.model.loc = self.location([form['longitude'], form['latitude']])
+        #self.geo_index.insert_store_by_location([form])
         messages.success(self.request, "The store has been posted.")
         return super(StoreCreateView, self).form_valid(form)
 
