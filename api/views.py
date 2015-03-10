@@ -34,12 +34,6 @@ class StoreListView(ListView):
         _posts = []
         db = Connection().geo_businesses
         db.places.create_index([("loc", GEO2D)])
-        """stores = self.model.objects
-        for store in stores:
-            db.places.insert({"loc": [store['longitude'], store['latitude']],
-                              "store_info": {"id": store['id'], "name": store["name"], "address": store["address1"],
-                                             "city": store["city"], "state": store["state"],
-                                             "zipcode": store["zipcode"]}})"""
 
         if 'limit' in self.request.GET:
             lm = int(self.request.GET["limit"])
@@ -161,7 +155,6 @@ class StoreDeleteView(DeleteView):
     Removes store
 
     """
-    # TODO: delete geopoint record in addition with store deletion
     def __init__(self):
         """
         Setup model
